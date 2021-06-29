@@ -1,0 +1,28 @@
+/*? ------------- style for shape ------------- */
+
+.baseSide {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateY(90deg);
+}
+
+.sideShape {
+    position: inherit;
+    background: linear-gradient(90deg,
+                rgb(107, 45, 9, 0.8) 0%,
+                rgb(107, 45, 9, 0.8) 50%,
+                rgb(140, 59, 12, 0.8) 50%,
+                rgb(140, 59, 12, 0.8) 0%),
+            linear-gradient(0deg,
+                rgb(107, 45, 9, 0.8) 0%,
+                rgb(107, 45, 9, 0.8) 50%,
+                rgb(140, 59, 12, 0.8) 50%,
+                rgb(140, 59, 12, 0.8) 0%);
+    box-shadow: inset 0px 0px 0px 0.6px rgb(0, 0, 0);
+    transform-style: preserve-3d;
+}
+
+.before {
+    position: absolute;
+    
+}
