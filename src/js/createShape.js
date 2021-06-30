@@ -1,10 +1,12 @@
+import _createSurface from "./createSurface.js";
+
 const _createShape = (numberOfSide, size) => {
     let data = {};
 
     function __init__() {
         data.sides = numberOfSide;
-        data.maxW = size[0];
-        data.maxH = size[1];
+        data.maxW = size[0],
+            data.maxH = size[1];
 
         _createElem();
         _appendChildIntoParent();
@@ -14,6 +16,8 @@ const _createShape = (numberOfSide, size) => {
             (i % 2) == 0 ? data.child[i].style.transformOrigin = 'top' : data.child[i].style.transformOrigin = 'bottom';
             data.child[i].style.transform = `${oldTransform} rotateX(${data.insDegree}deg)`;
         }
+        data.parent.prepend(data.surface);
+        console.log(data);
 
         return data;
     }
@@ -35,12 +39,6 @@ const _createShape = (numberOfSide, size) => {
 
             data.child[i].append(data.child[j]);
         }
-    }
-
-    function _createSurface() {
-        let strOfCoord = ''; 
-        data.points.forEach((coord, i) => strOfCoord += `${coord.x} ${coord.y}` + (data.sides - 1 > i ? ',' : ''));
-        console.log(strOfCoord);
     }
 
     function _createElem() {
@@ -71,7 +69,7 @@ const _createShape = (numberOfSide, size) => {
             _degree += data.centDegree;
         }
 
-        _createSurface();
+        _createSurface(data);
     }
 
     return __init__();
