@@ -17,7 +17,7 @@ const _createShape = (numberOfSide, size) => {
             data.child[i].style.transform = `${oldTransform} rotateX(${data.insDegree}deg)`;
         }
         data.parent.prepend(data.surface);
-        console.log(data);
+        console.log(data.surface);
 
         return data;
     }
