@@ -8,15 +8,15 @@
 .sideShape {
     position: absolute;
     background: linear-gradient(90deg,
-                rgb(107, 45, 9, 0.8) 0%,
-                rgb(107, 45, 9, 0.8) 50%,
-                rgb(140, 59, 12, 0.8) 50%,
-                rgb(140, 59, 12, 0.8) 0%),
+                rgb(107, 45, 9, 0.7) 0%,
+                rgb(107, 45, 9, 0.7) 50%,
+                rgb(140, 59, 12, 0.7) 50%,
+                rgb(140, 59, 12, 0.7) 0%),
             linear-gradient(0deg,
-                rgb(107, 45, 9, 0.8) 0%,
-                rgb(107, 45, 9, 0.8) 50%,
-                rgb(140, 59, 12, 0.8) 50%,
-                rgb(140, 59, 12, 0.8) 0%);
+                rgb(107, 45, 9, 0.7) 0%,
+                rgb(107, 45, 9, 0.7) 50%,
+                rgb(140, 59, 12, 0.7) 50%,
+                rgb(140, 59, 12, 0.7) 0%);
     box-shadow: inset 0px 0px 0px 0.6px rgb(0, 0, 0);
     transform-style: preserve-3d;
 }
