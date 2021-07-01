@@ -18,11 +18,11 @@ const createSurface = (object) => {
         surface.id = 'surface',
             polygon.id = 'polygon';
 
-        surface.setAttribute('viewBox', `${minX} ${minY} ${Math.abs(minX) + object.maxH} ${Math.abs(minY) + object.maxH}`);
+        surface.setAttribute('viewBox', `${minX} ${minY} ${Math.abs(minX) + object.maxW} ${Math.abs(minY) + object.maxW}`);
         surface.style.cssText = `
             position: absolute;
             width: ${object.maxW}px;
-            height: ${object.maxH}px;
+            height: ${object.maxW}px;
         `;
 
         polygon.setAttribute('points', coordForShape);

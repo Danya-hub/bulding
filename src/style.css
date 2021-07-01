@@ -1,5 +1,4 @@
 /*? ------------- style for shape ------------- */
-
 @import './style/shape.css';
 
 * {
@@ -24,7 +23,7 @@ body {
     transform: translate(-50%, -75%) rotateX(90deg) rotateZ(0deg);
     left: 50%;
     top: 75%;
-    animation: rotate 10s infinite linear;
+    animation: rotate 30s infinite linear;
 }
 
 @keyframes rotate {

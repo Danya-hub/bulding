@@ -2,7 +2,7 @@ const _createPlatform = (shape, sides) => {
     function __init__() {
         let parentElem = document.createElement('div');
         parentElem.id = 'platform';
-        const sizeOfPlatform = sides * shape.maxH;
+        const sizeOfPlatform = sides * shape.maxW;
 
         _setSize(parentElem, sizeOfPlatform);
         _addElem(parentElem);

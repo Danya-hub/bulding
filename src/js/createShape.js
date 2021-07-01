@@ -13,18 +13,19 @@ const _createShape = (numberOfSide, size) => {
 
         for (let i = 0; i < numberOfSide; i++) {
             const oldTransform = data.child[i].style.transform;
-            (i % 2) == 0 ? data.child[i].style.transformOrigin = 'top' : data.child[i].style.transformOrigin = 'bottom';
-            data.child[i].style.transform = `${oldTransform} rotateX(${data.insDegree}deg)`;
+            (i % 2) == 0 ? data.child[i].style.transformOrigin = 'left' : data.child[i].style.transformOrigin = 'right';
+            data.child[i].style.transform = `${oldTransform} rotateY(${data.insDegree}deg)`;
         }
         data.parent.prepend(data.surface);
+        console.log(data);
         console.log(data.surface);
 
         return data;
     }
 
-    function _setSize(elem, commonHeight = data.maxH) {
-        elem.style.width = `${data.maxW}px`;
-        elem.style.height = `${commonHeight}px`;
+    function _setSize(elem, commonWidth = data.maxW) {
+        elem.style.width = `${commonWidth}px`;
+        elem.style.height = `${data.maxH}px`;
     }
 
     function _appendChildIntoParent() {
@@ -33,7 +34,7 @@ const _createShape = (numberOfSide, size) => {
         for (let i = 0, j = 1; j < data.sides; i++, j++) {
             if (empty) {
                 data.parent.append(data.child[i]);
-                data.child[i].style.transform = `translate3d(0px, ${data.insDegree > 90 ? data.r - (data.r / Math.floor(data.sides / 2)) : 0}px, -${data.r}px)`;
+                data.child[i].style.transform = `translateZ(-${data.maxH / 2}px) rotateX(90deg)`;
                 empty = false;
             }
 
@@ -44,9 +45,9 @@ const _createShape = (numberOfSide, size) => {
     function _createElem() {
         data.insDegree = Math.round((180 * (data.sides - 2)) / data.sides),
             data.centDegree = 360 / data.sides;
-        data.h = data.maxH * (data.insDegree > 90 ? Math.sin((180 / data.sides) * (Math.PI / 180)) : 1);
-        data.r = data.h / (2 * Math.tan(180 / data.sides * (Math.PI / 180))),
-            data.R = data.h / (2 * Math.sin(180 / data.sides * (Math.PI / 180)));
+        data.w = data.maxW * (data.insDegree > 90 ? Math.sin((180 / data.sides) * (Math.PI / 180)) : 1);
+        data.r = data.w / (2 * Math.tan(180 / data.sides * (Math.PI / 180))),
+            data.R = data.w / (2 * Math.sin(180 / data.sides * (Math.PI / 180)));
 
         let parentElem = document.createElement('div');
         parentElem.className = 'baseSide';
@@ -60,7 +61,7 @@ const _createShape = (numberOfSide, size) => {
             let DOMElem = document.createElement('div');
             DOMElem.className = 'sideShape';
             data.child.push(DOMElem);
-            _setSize(DOMElem, data.h);
+            _setSize(DOMElem, data.w);
 
             data.points.push({
                 x: 2 * data.R * Math.cos(_degree * (Math.PI / 180)),
