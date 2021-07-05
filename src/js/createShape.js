@@ -12,9 +12,9 @@ const _createShape = (numberOfSide, size) => {
         _appendChildIntoParent();
 
         for (let i = 0; i < numberOfSide; i++) {
-            const oldTransform = data.sides[i].style.transform;
+            const oldTrans = data.sides[i].style.transform;
             (i % 2) == 0 ? data.sides[i].style.transformOrigin = 'right' : data.sides[i].style.transformOrigin = 'left';
-            data.sides[i].style.transform = `${oldTransform} rotateY(${data.insDegree}deg)`;
+            data.sides[i].style.transform = `${oldTrans} rotateY(${data.insDegree}deg)`;
         }
         data.parent.prepend(data.surface);
         console.log(data);
@@ -34,14 +34,16 @@ const _createShape = (numberOfSide, size) => {
             if (empty) {
                 data.parent.append(data.sides[i]);
                 data.sides[i].style.cssText += `
-                    transform: translate3d(-50%, ${data.r}px, -${data.maxH / 2}px) rotateX(90deg);
+                    transform: translate3d(-50%, 0, -${data.maxH / 2}px) rotateX(90deg);
                     left: 50%;
+                    top: 50%;
                 `;
                 empty = false;
             }
 
             data.sides[i].append(data.sides[j]);
         }
+        //? console.log((data.R - data.r) / 2);
     }
 
     function _createElem() {
@@ -66,8 +68,8 @@ const _createShape = (numberOfSide, size) => {
             _setSize(DOMElem, data.w);
 
             data.points.push({
-                x: 2 * data.R * Math.cos(_degree * (Math.PI / 180)),
-                y: 2 * data.R * Math.sin(_degree * (Math.PI / 180)),
+                x: data.R * Math.cos((_degree + data.insDegree / 2) * (Math.PI / 180)),
+                y: data.R * Math.sin((_degree + data.insDegree / 2) * (Math.PI / 180)),
             });
             _degree += data.centDegree;
         }

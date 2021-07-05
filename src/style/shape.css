@@ -20,3 +20,8 @@
     box-shadow: inset 0px 0px 0px 0.6px rgb(0, 0, 0);
     transform-style: preserve-3d;
 }
+
+.surface {
+    overflow: hidden;
+    box-shadow: inset 0px 0px 0px 1px red;
+}

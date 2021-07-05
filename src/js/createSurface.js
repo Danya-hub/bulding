@@ -3,7 +3,7 @@ const createSurface = (object) => {
     object.points.forEach((coord, i) => coordForShape += `${coord.x} ${coord.y}` + (object.numberOfSides - 1 > i ? ',' : ''));
     const minX = _findSpecialCoord('min', 'x'),
         minY = _findSpecialCoord('min', 'y');
-    // console.log('x:', _findSpecialCoord('max', 'x'), 'y:', _findSpecialCoord('max', 'y'));
+
     function __init__() {
         _createElem();
     }
@@ -15,13 +15,14 @@ const createSurface = (object) => {
     function _createElem() {
         let surface = document.createElement('svg'),
             polygon = document.createElement('polygon');
-        surface.id = 'surface',
-            polygon.id = 'polygon';
 
-        surface.setAttribute('viewBox', `${minX} ${minY} ${Math.abs(minX) + object.maxW} ${Math.abs(minY) + object.maxW}`);
+        surface.className = 'surface',
+            polygon.className = 'polygon';
+
+        surface.setAttribute('viewBox', `${minX} ${minY} ${object.maxW} ${object.maxW}`);
+        // polygon.style.transform = `translateY(${object.R - object.r}px)`;
         surface.style.cssText = `
             position: absolute;
-            transform: rotateZ(${object.insDegree / 2}deg);
             width: ${object.maxW}px;
             height: ${object.maxW}px;
         `;
