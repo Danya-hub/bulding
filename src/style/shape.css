@@ -1,8 +1,7 @@
 /*? ------------- style for shape ------------- */
 
 .baseSide {
-    position: relative;
-    transform-style: preserve-3d;
+    position: relative; /*! <--- */
 }
 
 .sideShape {

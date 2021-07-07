@@ -43,17 +43,22 @@ const _createShape = (numberOfSide, size) => {
 
             data.sides[i].append(data.sides[j]);
         }
-        //? console.log((data.R - data.r) / 2);
     }
 
     function _createElem() {
         data.insDegree = (180 * (data.numberOfSides - 2)) / data.numberOfSides,
             data.centDegree = 360 / data.numberOfSides;
+
+        // data.r = data.maxW / 2,
+        //     data.R = data.r / Math.cos((data.centDegree / 2) * (Math.PI / 180));
+        //     data.w = 2 * data.R * Math.sin((data.centDegree / 2) * (Math.PI / 180));
+
         data.w = data.maxW * (data.insDegree > 90 ? Math.sin((data.centDegree / 2) * (Math.PI / 180)) : 1);
         data.r = data.w / (2 * Math.tan((data.centDegree / 2) * (Math.PI / 180))),
             data.R = data.w / (2 * Math.sin((data.centDegree / 2) * (Math.PI / 180)));
 
         let parentElem = document.createElement('div');
+        
         parentElem.className = 'baseSide';
         data.parent = parentElem;
         _setSize(data.parent);
