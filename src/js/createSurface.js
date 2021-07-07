@@ -1,26 +1,27 @@
 const createSurface = (object) => {
     let coordForShape = '';
-    object.points.forEach((coord, i) => coordForShape += `${coord.x} ${coord.y}` + (object.numberOfSides - 1 > i ? ',' : ''));
-    const minX = _findSpecialCoord('min', 'x'),
-        minY = _findSpecialCoord('min', 'y');
-
+    
     function __init__() {
-        _createElem();
+        object.points.forEach((coord, i) => coordForShape += `${coord.x} ${coord.y}` + (object.numberOfSides - 1 > i ? ',' : ''));
+        const minX = _findSpecialCoord('min', 'x'),
+            minY = _findSpecialCoord('min', 'y');
+
+        _createElem(minX, minY);
     }
 
     function _findSpecialCoord(meth, axis) {
         return Math[meth](...object.points.map(e => e[axis]))
     }
 
-    function _createElem() {
+    function _createElem(_x, _y) {
         let surface = document.createElement('svg'),
             polygon = document.createElement('polygon');
 
         surface.className = 'surface',
             polygon.className = 'polygon';
+            console.log(object.maxH - (object.numberOfSides % 2 ? object.R : object.r));
 
-        surface.setAttribute('viewBox', `${minX} ${minY} ${object.maxW} ${object.maxW}`);
-        // polygon.style.transform = `translateY(${object.R - object.r}px)`;
+        surface.setAttribute('viewBox', `${_x} ${_y} ${object.maxW} ${object.maxW}`);
         surface.style.cssText = `
             position: absolute;
             width: ${object.maxW}px;
