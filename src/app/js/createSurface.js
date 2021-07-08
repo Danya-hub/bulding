@@ -15,8 +15,7 @@ const createSurface = (data) => {
 
         surface.setAttribute('viewBox', `${data.minX} ${data.minY} ${data.maxW} ${data.maxW}`);
         polygon.style.transform = `translate3d(0%, ${data.movCentY}%, 0)`;
-        // console.log(data);
-        // console.log(Math.abs(data.maxW + data.minX + data.minY));
+        //? console.log(Math.abs(data.maxW + data.minX + data.minY));
         surface.style.cssText = `
             position: absolute;
             width: ${data.maxW}px;

@@ -1,7 +1,7 @@
 import _createSurface from "./createSurface.js";
 
 const _createShape = (numberOfSide, size) => {
-    let data = {};
+    let data = {}; //* <---- index.js
 
     function __init__() {
         data.numberOfSides = numberOfSide;
@@ -26,7 +26,7 @@ const _createShape = (numberOfSide, size) => {
         elem.style.height = `${data.maxH}px`;
     }
 
-    function _appendChildIntoParent() { //TODO: <---------
+    function _appendChildIntoParent() { //! <---------
         let empty = true;
 
         for (let i = 0, j = 1; j < data.numberOfSides; i++, j++) {
@@ -75,18 +75,22 @@ const _createShape = (numberOfSide, size) => {
             data.sides.push(DOMElem);
             _setSize(DOMElem, data.w);
 
+            //* --------- surface ---------
             data.points.push({
                 x: data.R * Math.cos((_degree + data.insDegree / 2) * (Math.PI / 180)),
                 y: data.R * Math.sin((_degree + data.insDegree / 2) * (Math.PI / 180)),
             });
             _degree += data.centDegree;
+            //* ---------------------------
         }
-
+        
+        //* --------- surface ---------
         data.minX = _findSpecialCoord('min', 'x'),
-            data.minY = _findSpecialCoord('min', 'y');
+        data.minY = _findSpecialCoord('min', 'y');
         data.maxX = _findSpecialCoord('max', 'x'),
-            data.maxY = _findSpecialCoord('max', 'y');
+        data.maxY = _findSpecialCoord('max', 'y');
         data.movCentY = Math.abs(((data.maxW - (Math.abs(data.minY) + data.maxY)) * 100) / data.maxW) / 2;
+        //* ---------------------------
 
         _createSurface(data);
     }

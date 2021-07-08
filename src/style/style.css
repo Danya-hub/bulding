@@ -1,5 +1,5 @@
 /*? ------------- style for shape ------------- */
-@import './style/shape.css';
+@import '../style/shape.css';
 
 * {
     margin: 0;
