@@ -17,7 +17,6 @@ const _createShape = (numberOfSide, size) => {
             data.sides[i].style.transform = `${oldTrans} rotateY(${data.insDegree}deg)`;
         }
         data.parent.prepend(data.surface);
-        console.log(data);
 
         return data;
     }
@@ -27,14 +26,14 @@ const _createShape = (numberOfSide, size) => {
         elem.style.height = `${data.maxH}px`;
     }
 
-    function _appendChildIntoParent() {
+    function _appendChildIntoParent() { //TODO: <---------
         let empty = true;
 
         for (let i = 0, j = 1; j < data.numberOfSides; i++, j++) {
             if (empty) {
                 data.parent.append(data.sides[i]);
                 data.sides[i].style.cssText += `
-                    transform: translate3d(-50%, 0, -${data.maxH / 2}px) rotateX(90deg);
+                    transform: translate3d(-50%, -${data.movCentY}%, -${data.maxH / 2}px) rotateX(90deg);
                     left: 50%;
                     top: 50%;
                 `;
@@ -43,6 +42,10 @@ const _createShape = (numberOfSide, size) => {
 
             data.sides[i].append(data.sides[j]);
         }
+    }
+
+    function _findSpecialCoord(meth, axis) {
+        return Math[meth](...data.points.map(e => e[axis]))
     }
 
     function _createElem() {
@@ -58,7 +61,7 @@ const _createShape = (numberOfSide, size) => {
             data.R = data.w / (2 * Math.sin((data.centDegree / 2) * (Math.PI / 180)));
 
         let parentElem = document.createElement('div');
-        
+
         parentElem.className = 'baseSide';
         data.parent = parentElem;
         _setSize(data.parent);
@@ -78,6 +81,12 @@ const _createShape = (numberOfSide, size) => {
             });
             _degree += data.centDegree;
         }
+
+        data.minX = _findSpecialCoord('min', 'x'),
+            data.minY = _findSpecialCoord('min', 'y');
+        data.maxX = _findSpecialCoord('max', 'x'),
+            data.maxY = _findSpecialCoord('max', 'y');
+        data.movCentY = Math.abs(((data.maxW - (Math.abs(data.minY) + data.maxY)) * 100) / data.maxW) / 2;
 
         _createSurface(data);
     }

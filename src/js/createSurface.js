@@ -1,39 +1,31 @@
-const createSurface = (object) => {
+const createSurface = (data) => {
     let coordForShape = '';
-    const minX = _findSpecialCoord('min', 'x'),
-        minY = _findSpecialCoord('min', 'y'),
-        maxX = _findSpecialCoord('max', 'x'), //?
-        maxY = _findSpecialCoord('max', 'y'); //?
-    
+
     function __init__() {
-        object.points.forEach((coord, i) => coordForShape += `${coord.x} ${coord.y}` + (object.numberOfSides - 1 > i ? ',' : ''));
+        data.points.forEach((coord, i) => coordForShape += `${coord.x} ${coord.y}` + (data.numberOfSides - 1 > i ? ',' : ''));
 
         _createElem();
-    }
-
-    function _findSpecialCoord(meth, axis) {
-        return Math[meth](...object.points.map(e => e[axis]))
     }
 
     function _createElem() {
         let surface = document.createElement('svg'),
             polygon = document.createElement('polygon');
-
         surface.className = 'surface',
             polygon.className = 'polygon';
-console.log(maxX);
-console.log(minX);
-        surface.setAttribute('viewBox', `${minX} ${minY} ${object.maxW} ${object.maxW}`);
-        polygon.style.transform = `translate3d(0, ${object.maxW - (Math.abs(minY) + maxY)}px, 0)`;
+
+        surface.setAttribute('viewBox', `${data.minX} ${data.minY} ${data.maxW} ${data.maxW}`);
+        polygon.style.transform = `translate3d(0%, ${data.movCentY}%, 0)`;
+        // console.log(data);
+        // console.log(Math.abs(data.maxW + data.minX + data.minY));
         surface.style.cssText = `
             position: absolute;
-            width: ${object.maxW}px;
-            height: ${object.maxW}px;
+            width: ${data.maxW}px;
+            height: ${data.maxW}px;
         `;
 
         polygon.setAttribute('points', coordForShape);
         surface.append(polygon);
-        object.surface = surface;
+        data.surface = surface;
     }
 
     __init__();
