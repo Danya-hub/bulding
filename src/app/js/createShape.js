@@ -1,101 +1,121 @@
-import _createSurface from "./createSurface.js";
+class Shape {
+    constructor(numberOfSides, ...size) {
+        this.numberOfSides = numberOfSides;
+        this.__init__(...size);
+    }
 
-const _createShape = (numberOfSide, size) => {
-    let data = {}; //* <---- index.js
+    __init__(width, height) {
+        this.maxW = width,
+            this.maxH = height;
 
-    function __init__() {
-        data.numberOfSides = numberOfSide;
-        data.maxW = size[0],
-            data.maxH = size[1];
+        this._createElem();
+        this._createSurface();
+        this._appendChildIntoParent();
 
-        _createElem();
-        _appendChildIntoParent();
-
-        for (let i = 0; i < numberOfSide; i++) {
-            const oldTrans = data.sides[i].style.transform;
-            (i % 2) == 0 ? data.sides[i].style.transformOrigin = 'right' : data.sides[i].style.transformOrigin = 'left';
-            data.sides[i].style.transform = `${oldTrans} rotateY(${data.insDegree}deg)`;
+        for (let i = 0; i < this.numberOfSides; i++) {
+            const oldTrans = this.sides[i].style.transform;
+            (i % 2) == 0 ? this.sides[i].style.transformOrigin = 'right' : this.sides[i].style.transformOrigin = 'left';
+            this.sides[i].style.transform = `${oldTrans} rotateY(${this.insDegree}deg)`;
         }
-        data.parent.prepend(data.surface);
-
-        return data;
+        this.parent.prepend(this.surface);
+        console.log(this);
     }
 
-    function _setSize(elem, commonWidth = data.maxW) {
+    _setSize(elem, commonWidth = this.maxW) {
         elem.style.width = `${commonWidth}px`;
-        elem.style.height = `${data.maxH}px`;
+        elem.style.height = `${this.maxH}px`;
     }
 
-    function _appendChildIntoParent() { //! <---------
+    _appendChildIntoParent() { //! <---------
         let empty = true;
-
-        for (let i = 0, j = 1; j < data.numberOfSides; i++, j++) {
+        for (let i = 0, j = 1; j < this.numberOfSides; i++, j++) {
             if (empty) {
-                data.parent.append(data.sides[i]);
-                data.sides[i].style.cssText += `
-                    transform: translate3d(-50%, -${data.movCentY}%, -${data.maxH / 2}px) rotateX(90deg);
+                this.sides[i].style.cssText += `
+                    transform: translate3d(-50%, -${this.movCentY}%, -${this.maxH / 2}px) rotateX(90deg);
                     left: 50%;
                     top: 50%;
                 `;
                 empty = false;
+                this.parent.append(this.sides[i]);
             }
 
-            data.sides[i].append(data.sides[j]);
+            this.sides[i].append(this.sides[j]);
         }
     }
 
-    function _findSpecialCoord(meth, axis) {
-        return Math[meth](...data.points.map(e => e[axis]))
+    _findSpecialCoord(meth, axis) {
+        return Math[meth](...this.dataOfCoord.points.map(e => e[axis]))
     }
 
-    function _createElem() {
-        data.insDegree = (180 * (data.numberOfSides - 2)) / data.numberOfSides,
-            data.centDegree = 360 / data.numberOfSides;
-
-        // data.r = data.maxW / 2,
-        //     data.R = data.r / Math.cos((data.centDegree / 2) * (Math.PI / 180));
-        //     data.w = 2 * data.R * Math.sin((data.centDegree / 2) * (Math.PI / 180));
-
-        data.w = data.maxW * (data.insDegree > 90 ? Math.sin((data.centDegree / 2) * (Math.PI / 180)) : 1);
-        data.r = data.w / (2 * Math.tan((data.centDegree / 2) * (Math.PI / 180))),
-            data.R = data.w / (2 * Math.sin((data.centDegree / 2) * (Math.PI / 180)));
+    _createElem() {
+        this.insDegree = (180 * (this.numberOfSides - 2)) / this.numberOfSides,
+            this.centDegree = 360 / this.numberOfSides;
+        this.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.centDegree / 2) * (Math.PI / 180)) : 1);
+        this.r = this.w / (2 * Math.tan((this.centDegree / 2) * (Math.PI / 180))),
+            this.R = this.w / (2 * Math.sin((this.centDegree / 2) * (Math.PI / 180)));
 
         let parentElem = document.createElement('div');
-
         parentElem.className = 'baseSide';
-        data.parent = parentElem;
-        _setSize(data.parent);
+        this.parent = parentElem;
+        this._setSize(this.parent);
 
-        data.sides = [],
-            data.points = [];
-        let _degree = 0;
-        for (let i = 0; i < data.numberOfSides; i++) {
+        this.sides = [];
+        for (let i = 0; i < this.numberOfSides; i++) {
             let DOMElem = document.createElement('div');
             DOMElem.className = 'sideShape';
-            data.sides.push(DOMElem);
-            _setSize(DOMElem, data.w);
-
-            //* --------- surface ---------
-            data.points.push({
-                x: data.R * Math.cos((_degree + data.insDegree / 2) * (Math.PI / 180)),
-                y: data.R * Math.sin((_degree + data.insDegree / 2) * (Math.PI / 180)),
-            });
-            _degree += data.centDegree;
-            //* ---------------------------
+            this.sides.push(DOMElem);
+            this._setSize(DOMElem, this.w);
         }
-        
-        //* --------- surface ---------
-        data.minX = _findSpecialCoord('min', 'x'),
-        data.minY = _findSpecialCoord('min', 'y');
-        data.maxX = _findSpecialCoord('max', 'x'),
-        data.maxY = _findSpecialCoord('max', 'y');
-        data.movCentY = Math.abs(((data.maxW - (Math.abs(data.minY) + data.maxY)) * 100) / data.maxW) / 2;
-        //* ---------------------------
-
-        _createSurface(data);
     }
 
-    return __init__();
+    _setPoints() {
+        let _degree = 0;
+        this.dataOfCoord.points = [];
+        for (let i = 0; i < this.numberOfSides; i++) {
+            this.dataOfCoord.points.push({
+                x: this.R * Math.cos((_degree + this.insDegree / 2) * (Math.PI / 180)),
+                y: this.R * Math.sin((_degree + this.insDegree / 2) * (Math.PI / 180)),
+            });
+            _degree += this.centDegree;
+        }
+
+        this.dataOfCoord.minX = this._findSpecialCoord('min', 'x'),
+            this.dataOfCoord.minY = this._findSpecialCoord('min', 'y');
+        this.dataOfCoord.maxX = this._findSpecialCoord('max', 'x'),
+            this.dataOfCoord.maxY = this._findSpecialCoord('max', 'y');
+        this.movCentY = Math.abs((
+                (this.maxW - (Math.abs(this.dataOfCoord.minY) + this.dataOfCoord.maxY)) * 100) /
+            this.maxW) / 2;
+    }
+
+    _setStrCoord() {
+        this.dataOfCoord.coordForShape = '';
+        this.dataOfCoord.points.forEach((dataOfCoord, i) => this.dataOfCoord.coordForShape += `${dataOfCoord.x} ${dataOfCoord.y}` + (this.numberOfSides - 1 > i ? ',' : ''));
+    }
+
+    _createSurface() {
+        this.dataOfCoord = {};
+        this._setPoints();
+        this._setStrCoord();
+
+        let surface = document.createElement('svg'),
+            polygon = document.createElement('polygon');
+        surface.className = 'surface',
+            polygon.className = 'polygon';
+
+        surface.setAttribute('viewBox', `${this.dataOfCoord.minX} ${this.dataOfCoord.minY} ${this.maxW} ${this.maxW}`);
+        polygon.style.transform = `translate3d(0%, ${this.movCentY}%, 0)`;
+        //? console.log(Math.abs(data.maxW + data.minX + data.minY));
+        surface.style.cssText = `
+            position: absolute;
+            width: ${this.maxW}px;
+            height: ${this.maxW}px;
+        `;
+
+        polygon.setAttribute('points', this.dataOfCoord.coordForShape);
+        surface.append(polygon);
+        this.surface = surface;
+    }
 }
 
-export default _createShape;
+export default Shape;
