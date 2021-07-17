@@ -8,13 +8,17 @@ module.exports = {
     output: {
         filename: 'app.[hash:6].js',
     },
-    // watch: true,
     module: {
         rules: [{
-            test: /\.(js)$/,
-            exclude: /node_modules/,
-            use: ['babel-loader'],
-        }, ],
+                test: /\.(js)$/,
+                exclude: /(node_modules)/,
+                use: ['babel-loader'],
+            },
+            {
+                test: /\.(css)$/,
+                use: ['style-loader', 'css-loader'],
+            }
+        ],
     },
     resolve: {
         extensions: ['*', '.js'],
