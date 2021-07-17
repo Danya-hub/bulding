@@ -21,22 +21,22 @@ class Shape {
         console.log(this);
     }
 
-    _setSize(elem, commonWidth = this.maxW) {
-        elem.style.width = `${commonWidth}px`;
-        elem.style.height = `${this.maxH}px`;
+    _setSize(elem, _width, _height) {
+        elem.style.width = `${!_width ? _width = this.maxW : _width}px`;
+        elem.style.height = `${!_height ? _height = this.maxH : _height}px`;
     }
 
-    _appendChildIntoParent() { //! <---------
+    _appendChildIntoParent() {
         let empty = true;
         for (let i = 0, j = 1; j < this.numberOfSides; i++, j++) {
             if (empty) {
                 this.sides[i].style.cssText += `
-                    transform: translate3d(-50%, -${this.movCentY}%, -${this.maxH / 2}px) rotateX(90deg);
+                    transform: translate3d(-${50 + this.movCentX}%, ${this.maxH > this.maxW ? ((-(this.maxH / 2) - (this.movCentY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH : -this.movCentY}%, -${this.maxH / 2}px) rotateX(90deg);
+                    top: ${this.maxH > this.maxW ? 0 : 50}%;
                     left: 50%;
-                    top: 50%;
                 `;
-                empty = false;
                 this.parent.append(this.sides[i]);
+                empty = false;
             }
 
             this.sides[i].append(this.sides[j]);
@@ -53,11 +53,12 @@ class Shape {
         this.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.centDegree / 2) * (Math.PI / 180)) : 1);
         this.r = this.w / (2 * Math.tan((this.centDegree / 2) * (Math.PI / 180))),
             this.R = this.w / (2 * Math.sin((this.centDegree / 2) * (Math.PI / 180)));
+        this.diameter = this.R * 2;
 
         let parentElem = document.createElement('div');
         parentElem.className = 'baseSide';
         this.parent = parentElem;
-        this._setSize(this.parent);
+        this._setSize(this.parent, null, this.maxW);
 
         this.sides = [];
         for (let i = 0; i < this.numberOfSides; i++) {
@@ -83,9 +84,12 @@ class Shape {
             this.dataOfCoord.minY = this._findSpecialCoord('min', 'y');
         this.dataOfCoord.maxX = this._findSpecialCoord('max', 'x'),
             this.dataOfCoord.maxY = this._findSpecialCoord('max', 'y');
+
+        this.diagonal = Math.abs(this.dataOfCoord.minX) + this.dataOfCoord.maxX;
         this.movCentY = Math.abs((
                 (this.maxW - (Math.abs(this.dataOfCoord.minY) + this.dataOfCoord.maxY)) * 100) /
             this.maxW) / 2;
+        this.movCentX = Math.round(this.w) != Math.round(this.diagonal) ? ((this.diameter - this.diagonal) * 100) / this.maxW : 0;
     }
 
     _setStrCoord() {
@@ -98,23 +102,18 @@ class Shape {
         this._setPoints();
         this._setStrCoord();
 
-        let surface = document.createElement('svg'),
-            polygon = document.createElement('polygon');
-        surface.className = 'surface',
+        let polygon = document.createElement('polygon');
+        this.surface = document.createElement('svg');
+        this.surface.className = 'surface',
             polygon.className = 'polygon';
 
-        surface.setAttribute('viewBox', `${this.dataOfCoord.minX} ${this.dataOfCoord.minY} ${this.maxW} ${this.maxW}`);
+        this.surface.setAttribute('viewBox', `${this.dataOfCoord.minX} ${this.dataOfCoord.minY} ${this.maxW} ${this.maxW}`);
+        this.surface.style.position = 'absolute';
+        this._setSize(this.surface, null, this.maxW);
         polygon.style.transform = `translate3d(0%, ${this.movCentY}%, 0)`;
-        //? console.log(Math.abs(data.maxW + data.minX + data.minY));
-        surface.style.cssText = `
-            position: absolute;
-            width: ${this.maxW}px;
-            height: ${this.maxW}px;
-        `;
 
         polygon.setAttribute('points', this.dataOfCoord.coordForShape);
-        surface.append(polygon);
-        this.surface = surface;
+        this.surface.append(polygon);
     }
 }
 
