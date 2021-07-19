@@ -1,6 +1,5 @@
 'use strict';
 
-import '../style/style.css';
 import _createShape from "./js/createShape.js";
 import _createPlatform from "./js/createPlatform.js";
 

@@ -1,4 +1,4 @@
-const NODE_ENV = process.env.NODE_ENV;
+// const NODE_ENV = process.env.NODE_ENV;
 const webpack = require('webpack');
 const path = require('path');
 
@@ -8,6 +8,9 @@ module.exports = {
     output: {
         filename: 'app.[hash:6].js',
     },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+    ],
     module: {
         rules: [{
                 test: /\.(js)$/,
@@ -20,7 +23,13 @@ module.exports = {
             }
         ],
     },
+    devServer: {
+        contentBase: path.join(__dirname, 'src'),
+        open: true,
+        compress: true,
+        hot: true,
+    },
     resolve: {
-        extensions: ['*', '.js'],
+        extensions: ['*', '.js', '.css'],
     },
 }
