@@ -1,29 +1,55 @@
 class Shape {
-    constructor(numberOfSides, ...size) {
+    constructor(numberOfSides, size, parts) {
         this.numberOfSides = numberOfSides;
+        this._setParts(...parts);
         this.__init__(...size);
     }
 
     __init__(width, height) {
         this.maxW = width,
-            this.maxH = height;
+            this.hasSides ? this.maxH = height : null;
+        this._setComputation();
 
-        this._createElem();
-        this._createSurface();
-        this._appendChildIntoParent();
+        this.parent = document.createElement('div');
+        this.parent.className = 'baseSide';
+        this._setSize(this.parent, null, this.maxW);
 
-        for (let i = 0; i < this.numberOfSides; i++) {
-            const oldTrans = this.sides[i].style.transform;
-            (i % 2) == 0 ? this.sides[i].style.transformOrigin = 'right' : this.sides[i].style.transformOrigin = 'left';
-            this.sides[i].style.transform = `${oldTrans} rotateY(${this.insDegree}deg)`;
-        }
-        this.parent.prepend(this.surface);
+        if (this.hasSides) {
+            this._createSides();
+            this._appendChildIntoParent();
+
+            for (let i = 0; i < this.numberOfSides; i++) {
+                const oldTrans = this.sides[i].style.transform;
+                (i % 2) == 0 ? this.sides[i].style.transformOrigin = 'right' : this.sides[i].style.transformOrigin = 'left';
+                this.sides[i].style.transform = `${oldTrans} rotateY(${this.insDegree}deg)`;
+            }
+        };
+        this.hasSurface ? (this._createSurface(), this.parent.prepend(this.surface)) : null;
+
         console.log(this);
     }
 
+    _setParts(sides = true, surface = true) {
+        this.hasSides = sides,
+            this.hasSurface = surface;
+    }
+
     _setSize(elem, _width, _height) {
-        elem.style.width = `${!_width ? _width = this.maxW : _width}px`;
-        elem.style.height = `${!_height ? _height = this.maxH : _height}px`;
+        elem.style.width = `${!_width ? _width = this.maxW : _width}px`,
+            elem.style.height = `${!_height ? _height = this.maxH : _height}px`;
+    }
+
+    _setComputation() {
+        this.dataOfCoord = {};
+
+        this.insDegree = (180 * (this.numberOfSides - 2)) / this.numberOfSides,
+            this.centDegree = 360 / this.numberOfSides;
+        this.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.centDegree / 2) * (Math.PI / 180)) : 1);
+        this.r = this.w / (2 * Math.tan((this.centDegree / 2) * (Math.PI / 180))),
+            this.R = this.w / (2 * Math.sin((this.centDegree / 2) * (Math.PI / 180)));
+        this.diameter = this.R * 2;
+
+        this._setPoints();
     }
 
     _appendChildIntoParent() {
@@ -47,19 +73,7 @@ class Shape {
         return Math[meth](...this.dataOfCoord.points.map(e => e[axis]))
     }
 
-    _createElem() {
-        this.insDegree = (180 * (this.numberOfSides - 2)) / this.numberOfSides,
-            this.centDegree = 360 / this.numberOfSides;
-        this.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.centDegree / 2) * (Math.PI / 180)) : 1);
-        this.r = this.w / (2 * Math.tan((this.centDegree / 2) * (Math.PI / 180))),
-            this.R = this.w / (2 * Math.sin((this.centDegree / 2) * (Math.PI / 180)));
-        this.diameter = this.R * 2;
-
-        let parentElem = document.createElement('div');
-        parentElem.className = 'baseSide';
-        this.parent = parentElem;
-        this._setSize(this.parent, null, this.maxW);
-
+    _createSides() {
         this.sides = [];
         for (let i = 0; i < this.numberOfSides; i++) {
             let DOMElem = document.createElement('div');
@@ -70,8 +84,10 @@ class Shape {
     }
 
     _setPoints() {
-        let _degree = 0;
         this.dataOfCoord.points = [];
+        this.dataOfCoord.coordForShape = '';
+
+        let _degree = 0;
         for (let i = 0; i < this.numberOfSides; i++) {
             this.dataOfCoord.points.push({
                 x: this.R * Math.cos((_degree + this.insDegree / 2) * (Math.PI / 180)),
@@ -79,6 +95,7 @@ class Shape {
             });
             _degree += this.centDegree;
         }
+        this.dataOfCoord.points.forEach((dataOfCoord, i) => this.dataOfCoord.coordForShape += `${dataOfCoord.x} ${dataOfCoord.y}` + (this.numberOfSides - 1 > i ? ',' : ''));
 
         this.dataOfCoord.minX = this._findSpecialCoord('min', 'x'),
             this.dataOfCoord.minY = this._findSpecialCoord('min', 'y');
@@ -92,16 +109,7 @@ class Shape {
         this.movCentX = Math.round(this.w) != Math.round(this.diagonal) ? ((this.diameter - this.diagonal) * 100) / this.maxW : 0;
     }
 
-    _setStrCoord() {
-        this.dataOfCoord.coordForShape = '';
-        this.dataOfCoord.points.forEach((dataOfCoord, i) => this.dataOfCoord.coordForShape += `${dataOfCoord.x} ${dataOfCoord.y}` + (this.numberOfSides - 1 > i ? ',' : ''));
-    }
-
     _createSurface() {
-        this.dataOfCoord = {};
-        this._setPoints();
-        this._setStrCoord();
-
         let polygon = document.createElement('polygon');
         this.surface = document.createElement('svg');
         this.surface.className = 'surface',
