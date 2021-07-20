@@ -8,12 +8,14 @@ class Shape {
     __init__(width, height) {
         this.maxW = width,
             this.hasSides ? this.maxH = height : null;
+
         this._setComputation();
 
-        this.parent = document.createElement('div');
-        this.parent.className = 'baseSide';
+        this.parent = document.createElement('div'),
+            this.parent.className = 'baseSide';
         this._setSize(this.parent, null, this.maxW);
 
+        this.hasSurface ? (this._createSurface(), this.parent.prepend(this.surface)) : null;
         if (this.hasSides) {
             this._createSides();
             this._appendChildIntoParent();
@@ -21,10 +23,9 @@ class Shape {
             for (let i = 0; i < this.numberOfSides; i++) {
                 const oldTrans = this.sides[i].style.transform;
                 (i % 2) == 0 ? this.sides[i].style.transformOrigin = 'right' : this.sides[i].style.transformOrigin = 'left';
-                this.sides[i].style.transform = `${oldTrans} rotateY(${this.insDegree}deg)`;
+                this.sides[i].style.transform = `${oldTrans} rotateY(${this.dataOfComputations.insDegree}deg)`;
             }
         };
-        this.hasSurface ? (this._createSurface(), this.parent.prepend(this.surface)) : null;
 
         console.log(this);
     }
@@ -40,15 +41,14 @@ class Shape {
     }
 
     _setComputation() {
-        this.dataOfCoord = {};
+        this.dataOfComputations = {};
 
-        this.insDegree = (180 * (this.numberOfSides - 2)) / this.numberOfSides,
-            this.centDegree = 360 / this.numberOfSides;
-        this.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.centDegree / 2) * (Math.PI / 180)) : 1);
-        this.r = this.w / (2 * Math.tan((this.centDegree / 2) * (Math.PI / 180))),
-            this.R = this.w / (2 * Math.sin((this.centDegree / 2) * (Math.PI / 180)));
-        this.diameter = this.R * 2;
-
+        this.dataOfComputations.insDegree = (180 * (this.numberOfSides - 2)) / this.numberOfSides,
+            this.dataOfComputations.centDegree = 360 / this.numberOfSides;
+        this.dataOfComputations.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.dataOfComputations.centDegree / 2) * (Math.PI / 180)) : 1);
+        this.dataOfComputations.r = this.dataOfComputations.w / (2 * Math.tan((this.dataOfComputations.centDegree / 2) * (Math.PI / 180))),
+            this.dataOfComputations.R = this.dataOfComputations.w / (2 * Math.sin((this.dataOfComputations.centDegree / 2) * (Math.PI / 180)));
+        this.dataOfComputations.diameter = this.dataOfComputations.R * 2;
         this._setPoints();
     }
 
@@ -57,11 +57,13 @@ class Shape {
         for (let i = 0, j = 1; j < this.numberOfSides; i++, j++) {
             if (empty) {
                 this.sides[i].style.cssText += `
-                    transform: translate3d(-${50 + this.movCentX}%, ${this.maxH > this.maxW ? ((-(this.maxH / 2) - (this.movCentY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH : -this.movCentY}%, -${this.maxH / 2}px) rotateX(90deg);
+                    transform: translate3d(-${50 + this.dataOfComputations.movCentX}%, ${this.maxH > this.maxW ? ((-(this.maxH / 2) - (this.dataOfComputations.movCentY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH : this.maxH < this.maxW ? -this.dataOfComputations.movCentY + (((this.maxW / this.maxH) * this.dataOfComputations.movCentY) - this.dataOfComputations.movCentY) * this.dataOfComputations.movCentY : -this.dataOfComputations.movCentY}%, -${this.maxH / 2}px) rotateX(90deg);
                     top: ${this.maxH > this.maxW ? 0 : 50}%;
                     left: 50%;
                 `;
                 this.parent.append(this.sides[i]);
+                console.log((((this.maxW / this.maxH) * this.dataOfComputations.movCentY) - this.dataOfComputations.movCentY) * this.dataOfComputations.movCentY);
+                console.log((this.maxW - this.maxH) / this.maxW * Math.pow(this.dataOfComputations.movCentY, 2));
                 empty = false;
             }
 
@@ -79,22 +81,23 @@ class Shape {
             let DOMElem = document.createElement('div');
             DOMElem.className = 'sideShape';
             this.sides.push(DOMElem);
-            this._setSize(DOMElem, this.w);
+            this._setSize(DOMElem, this.dataOfComputations.w);
         }
     }
 
     _setPoints() {
-        this.dataOfCoord.points = [];
+        this.dataOfCoord = {},
+            this.dataOfCoord.points = [];
         this.dataOfCoord.coordForShape = '';
 
         let _degree = 0;
-        for (let i = 0; i < this.numberOfSides; i++) {
+        for (let i = 0; i < this.numberOfSides; i++)
             this.dataOfCoord.points.push({
-                x: this.R * Math.cos((_degree + this.insDegree / 2) * (Math.PI / 180)),
-                y: this.R * Math.sin((_degree + this.insDegree / 2) * (Math.PI / 180)),
-            });
-            _degree += this.centDegree;
-        }
+                x: this.dataOfComputations.R * Math.cos((_degree + this.dataOfComputations.insDegree / 2) * (Math.PI / 180)),
+                y: this.dataOfComputations.R * Math.sin((_degree + this.dataOfComputations.insDegree / 2) * (Math.PI / 180)),
+            }),
+            _degree += this.dataOfComputations.centDegree;
+
         this.dataOfCoord.points.forEach((dataOfCoord, i) => this.dataOfCoord.coordForShape += `${dataOfCoord.x} ${dataOfCoord.y}` + (this.numberOfSides - 1 > i ? ',' : ''));
 
         this.dataOfCoord.minX = this._findSpecialCoord('min', 'x'),
@@ -102,11 +105,11 @@ class Shape {
         this.dataOfCoord.maxX = this._findSpecialCoord('max', 'x'),
             this.dataOfCoord.maxY = this._findSpecialCoord('max', 'y');
 
-        this.diagonal = Math.abs(this.dataOfCoord.minX) + this.dataOfCoord.maxX;
-        this.movCentY = Math.abs((
+        this.dataOfComputations.diagonal = Math.abs(this.dataOfCoord.minX) + this.dataOfCoord.maxX;
+        this.dataOfComputations.movCentY = Math.abs((
                 (this.maxW - (Math.abs(this.dataOfCoord.minY) + this.dataOfCoord.maxY)) * 100) /
             this.maxW) / 2;
-        this.movCentX = Math.round(this.w) != Math.round(this.diagonal) ? ((this.diameter - this.diagonal) * 100) / this.maxW : 0;
+        this.dataOfComputations.movCentX = Math.round(this.dataOfComputations.w) != Math.round(this.dataOfComputations.diagonal) ? ((this.dataOfComputations.diameter - this.dataOfComputations.diagonal) * 100) / this.maxW : 0;
     }
 
     _createSurface() {
@@ -118,7 +121,7 @@ class Shape {
         this.surface.setAttribute('viewBox', `${this.dataOfCoord.minX} ${this.dataOfCoord.minY} ${this.maxW} ${this.maxW}`);
         this.surface.style.position = 'absolute';
         this._setSize(this.surface, null, this.maxW);
-        polygon.style.transform = `translate3d(0%, ${this.movCentY}%, 0)`;
+        polygon.style.transform = `translate3d(0%, ${this.dataOfComputations.movCentY}%, 0)`;
 
         polygon.setAttribute('points', this.dataOfCoord.coordForShape);
         this.surface.append(polygon);
