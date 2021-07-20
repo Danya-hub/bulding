@@ -45,7 +45,7 @@ class Shape {
 
         this.dataOfComputations.insDegree = (180 * (this.numberOfSides - 2)) / this.numberOfSides,
             this.dataOfComputations.centDegree = 360 / this.numberOfSides;
-        this.dataOfComputations.w = this.maxW * (this.insDegree > 90 ? Math.sin((this.dataOfComputations.centDegree / 2) * (Math.PI / 180)) : 1);
+        this.dataOfComputations.w = this.maxW * (this.dataOfComputations.insDegree > 90 ? Math.sin((this.dataOfComputations.centDegree / 2) * (Math.PI / 180)) : 1);
         this.dataOfComputations.r = this.dataOfComputations.w / (2 * Math.tan((this.dataOfComputations.centDegree / 2) * (Math.PI / 180))),
             this.dataOfComputations.R = this.dataOfComputations.w / (2 * Math.sin((this.dataOfComputations.centDegree / 2) * (Math.PI / 180)));
         this.dataOfComputations.diameter = this.dataOfComputations.R * 2;
@@ -57,13 +57,13 @@ class Shape {
         for (let i = 0, j = 1; j < this.numberOfSides; i++, j++) {
             if (empty) {
                 this.sides[i].style.cssText += `
-                    transform: translate3d(-${50 + this.dataOfComputations.movCentX}%, ${this.maxH > this.maxW ? ((-(this.maxH / 2) - (this.dataOfComputations.movCentY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH : this.maxH < this.maxW ? -this.dataOfComputations.movCentY + (((this.maxW / this.maxH) * this.dataOfComputations.movCentY) - this.dataOfComputations.movCentY) * this.dataOfComputations.movCentY : -this.dataOfComputations.movCentY}%, -${this.maxH / 2}px) rotateX(90deg);
+                    transform: translate3d(-${50 + (Math.round(this.dataOfComputations.w) != Math.round(this.dataOfComputations.diagonal) ? this.dataOfComputations.spaceX : 0)}%, ${this.maxH > this.maxW ? ((-(this.maxH / 2) - (this.dataOfComputations.spaceY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH : this.maxH < this.maxW ? -this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY : -this.dataOfComputations.spaceY}%, -${this.maxH / 2}px) rotateX(90deg);
                     top: ${this.maxH > this.maxW ? 0 : 50}%;
                     left: 50%;
                 `;
                 this.parent.append(this.sides[i]);
-                console.log((((this.maxW / this.maxH) * this.dataOfComputations.movCentY) - this.dataOfComputations.movCentY) * this.dataOfComputations.movCentY);
-                console.log((this.maxW - this.maxH) / this.maxW * Math.pow(this.dataOfComputations.movCentY, 2));
+                console.log(-this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
+                // console.log(this.dataOfComputations.spaceX / (this.maxH / this.maxW));
                 empty = false;
             }
 
@@ -106,10 +106,10 @@ class Shape {
             this.dataOfCoord.maxY = this._findSpecialCoord('max', 'y');
 
         this.dataOfComputations.diagonal = Math.abs(this.dataOfCoord.minX) + this.dataOfCoord.maxX;
-        this.dataOfComputations.movCentY = Math.abs((
+        this.dataOfComputations.spaceX = ((this.dataOfComputations.diameter - this.dataOfComputations.diagonal) * 100) / this.maxW;
+        this.dataOfComputations.spaceY = Math.abs((
                 (this.maxW - (Math.abs(this.dataOfCoord.minY) + this.dataOfCoord.maxY)) * 100) /
             this.maxW) / 2;
-        this.dataOfComputations.movCentX = Math.round(this.dataOfComputations.w) != Math.round(this.dataOfComputations.diagonal) ? ((this.dataOfComputations.diameter - this.dataOfComputations.diagonal) * 100) / this.maxW : 0;
     }
 
     _createSurface() {
@@ -121,7 +121,7 @@ class Shape {
         this.surface.setAttribute('viewBox', `${this.dataOfCoord.minX} ${this.dataOfCoord.minY} ${this.maxW} ${this.maxW}`);
         this.surface.style.position = 'absolute';
         this._setSize(this.surface, null, this.maxW);
-        polygon.style.transform = `translate3d(0%, ${this.dataOfComputations.movCentY}%, 0)`;
+        polygon.style.transform = `translate3d(0%, ${this.dataOfComputations.spaceY}%, 0)`;
 
         polygon.setAttribute('points', this.dataOfCoord.coordForShape);
         this.surface.append(polygon);

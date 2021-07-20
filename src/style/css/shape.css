@@ -1,11 +1,11 @@
 /*? -----===== style for shape =====----- */
 
-.baseSide,
-.sideShape {
-    position: inherit;
+.baseSide {
+    position: relative;
 }
 
 .sideShape {
+    position: absolute;
     background: rgb(140, 59, 12);
     box-shadow: inset 0px 0px 0px 0.6px rgb(0, 0, 0);
     transform-style: preserve-3d;
