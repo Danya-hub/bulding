@@ -5,6 +5,6 @@ import _createPlatform from "./js/createPlatform.js";
 
 _createPlatform(new _createShape(
     5, // number of sides
-    [100, 100], //width, height
+    [100, 80], //width, height
     [] //sides, surface
 ), 1);

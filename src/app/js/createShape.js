@@ -62,8 +62,11 @@ class Shape {
                     left: 50%;
                 `;
                 this.parent.append(this.sides[i]);
-                console.log(-this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
-                // console.log(this.dataOfComputations.spaceX / (this.maxH / this.maxW));
+                console.log('centX:', -this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
+                // console.log('centY:', ((-(this.maxH / 2) - (this.dataOfComputations.spaceY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH);
+
+                // console.log(-this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
+                console.log((this.maxH / this.maxW) * this.dataOfComputations.spaceX);
                 empty = false;
             }
 
