@@ -5,7 +5,7 @@ class Shape {
         this.__init__(...size);
     }
 
-    __init__(width, height) {
+    __init__(width = 0, height = 0) {
         this.maxW = width,
             this.hasSides ? this.maxH = height : null;
 
@@ -62,11 +62,11 @@ class Shape {
                     left: 50%;
                 `;
                 this.parent.append(this.sides[i]);
-                console.log('centX:', -this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
+                // console.log('centX:', -this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
                 // console.log('centY:', ((-(this.maxH / 2) - (this.dataOfComputations.spaceY / (this.maxH / this.maxW)) + this.maxW) * 100) / this.maxH);
 
                 // console.log(-this.dataOfComputations.spaceY + (((this.maxW / this.maxH) * this.dataOfComputations.spaceY) - this.dataOfComputations.spaceY) * this.dataOfComputations.spaceY);
-                console.log((this.maxH / this.maxW) * this.dataOfComputations.spaceX);
+                // console.log((this.maxH / this.maxW) * this.dataOfComputations.spaceX);
                 empty = false;
             }
 
@@ -84,6 +84,7 @@ class Shape {
             let DOMElem = document.createElement('div');
             DOMElem.className = 'sideShape';
             this.sides.push(DOMElem);
+            console.log(DOMElem);
             this._setSize(DOMElem, this.dataOfComputations.w);
         }
     }

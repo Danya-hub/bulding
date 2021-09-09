@@ -1,4 +1,5 @@
 /*? ------------- style for shape ------------- */
+@import './css/panel.css';
 @import './css/shape.css';
 
 * {
@@ -9,28 +10,27 @@
 }
 
 body {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: radial-gradient(circle, rgb(255 255 255) 30%, rgb(215 215 215)) no-repeat;
     width: 100vw;
     height: 100vh;
 }
 
 #platform {
-    position: absolute;
     display: flex;
     flex-wrap: wrap;
     transform-style: preserve-3d;
-    left: 50%;
-    top: 50%;
     animation: rotate 30s infinite linear;
 }
 
 @keyframes rotate {
     0% {
-        transform: translate(-50%, -50%) rotateX(50deg) rotateZ(0deg);
+        transform: rotateX(50deg) rotateZ(0deg);
     }
 
     100% {
-        transform: translate(-50%, -50%) rotateX(50deg) rotateZ(360deg);
+        transform: rotateX(50deg) rotateZ(360deg);
     }
 }

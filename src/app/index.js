@@ -1,10 +1,22 @@
 'use strict';
 
 import _createShape from "./js/createShape.js";
-import _createPlatform from "./js/createPlatform.js";
+import { data } from "./data.js";
 
-_createPlatform(new _createShape(
-    5, // number of sides
-    [100, 80], //width, height
-    [] //sides, surface
-), 1);
+let platform = document.createElement('div');
+platform.id = 'platform';
+document.body.append(platform);
+
+Array(...document.querySelectorAll('.input')).forEach(e => e.addEventListener('input', () => {
+    platform.innerHTML = '';
+    data[e.id] = Number(e.value);
+    let shape = new _createShape(
+        data.sides, 
+        [data.width, data.height],
+        [] //sides, surface
+    );
+
+    platform.style.cssText = `width: ${data.numOfShape * shape.maxW}px; height: ${data.numOfShape * shape.maxW}px;`;
+    for (let i = 0; i < data.numOfShape * data.numOfShape; i++)
+        platform.innerHTML += shape.parent.outerHTML;
+}));
