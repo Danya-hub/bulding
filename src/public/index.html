@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,12 +9,30 @@
     <link rel="stylesheet" href="../style/style.css">
     <title>BuldingBlock</title>
 </head>
+
 <body>
-    <div id="window">
-        <input type="text" id="sides" class="input" placeholder="Кол. сторон" required>
-        <input type="text" id="width" class="input" placeholder="Ширина" required>
-        <input type="text" id="height" class="input" placeholder="Высота" required>
+    <div id="settings">
+        <form>
+            <label>
+                Кол. сторон:
+                <input type="text" id="sides" class="input" required>
+            </label>
+            <label>
+                Ширина:
+                <input type="text" id="width" class="input" required>
+            </label>
+            <label>
+                Высота:
+                <input type="text" id="height" class="input" required>
+            </label>
+        </form>
+        <button class="openPanel"><span id="status">открыть</span> настройки </button>
     </div>
-    <script defer src="../app/index.js" type="module"></script>
+    <div id="info"></div>
+    <button class="openInfo">
+        <img src="./assets/svg/menu.svg" alt="menu">
+    </button>
+    <script defer src="../app/app.js" type="module"></script>
 </body>
+
 </html>

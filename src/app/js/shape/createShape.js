@@ -26,8 +26,6 @@ class Shape {
                 this.sides[i].style.transform = `${oldTrans} rotateY(${this.dataOfComputations.insDegree}deg)`;
             }
         };
-
-        console.log(this);
     }
 
     _setParts(sides = true, surface = true) {
@@ -84,7 +82,6 @@ class Shape {
             let DOMElem = document.createElement('div');
             DOMElem.className = 'sideShape';
             this.sides.push(DOMElem);
-            console.log(DOMElem);
             this._setSize(DOMElem, this.dataOfComputations.w);
         }
     }

@@ -1,0 +1,49 @@
+#info {
+    position: absolute;
+    background: #fff;
+    transition: .2s opacity, .2s visibility;
+    padding: 40px 20px;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 999;
+    visibility: hidden;
+}
+
+#info ul li {
+    margin-top: 14px;
+}
+
+#info ul li:first-child {
+    margin: 0;
+}
+
+#info ul li .name {
+    font-weight: 500;
+}
+
+.openInfo {
+    position: absolute;
+    background: #fff;
+    border: 1px solid;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    right: 30px;
+    bottom: 30px;
+    padding: 10px;
+    transition: .2s opacity, .2s visibility;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+}
+
+.closeInfo {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 30px;
+    top: 30px;
+}
