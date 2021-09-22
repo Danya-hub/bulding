@@ -19,12 +19,13 @@ export default () => {
         if (bool) {
             document.querySelector('.openInfo').style.cssText = `opacity: 1; visibility: visible;`;
             let shape = new _createShape(
-                data.sides,
+                data.sides < data.minNumOfSides ? data.minNumOfSides : data.sides,
                 [data.width, data.height],
                 [] //sides, surface
             )
 
             platform.style.cssText = `width: ${data.numOfShape * shape.maxW}px; height: ${data.numOfShape * shape.maxW}px;`;
+            console.dir(shape.parent);
             for (let i = 0; i < data.numOfShape * data.numOfShape; i++)
                 platform.innerHTML += shape.parent.outerHTML;
             new _setInfoShape(shape)

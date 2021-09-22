@@ -10,17 +10,28 @@
     opacity: 0;
     z-index: 999;
     visibility: hidden;
+    overflow-y: scroll;
 }
 
-#info ul li {
-    margin-top: 14px;
+#info::-webkit-scrollbar {
+    width: 12px;
 }
 
-#info ul li:first-child {
-    margin: 0;
+#info::-webkit-scrollbar-thumb {
+    background: rgb(0, 11, 31);
+    border: 2px solid #fff;
+    border-radius: 30px;
 }
 
-#info ul li .name {
+#info::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+#info>div {
+    margin-bottom: 10px;
+}
+
+#info .name {
     font-weight: 500;
 }
 
@@ -41,7 +52,8 @@
 }
 
 .closeInfo {
-    position: absolute;
+    position: fixed;
+    background: #fff;
     width: 30px;
     height: 30px;
     right: 30px;

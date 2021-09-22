@@ -5,7 +5,7 @@ class Shape {
         this.__init__(...size);
     }
 
-    __init__(width = 0, height = 0) {
+    __init__(width, height) {
         this.maxW = width,
             this.hasSides ? this.maxH = height : null;
 
@@ -36,6 +36,10 @@ class Shape {
     _setSize(elem, _width, _height) {
         elem.style.width = `${!_width ? _width = this.maxW : _width}px`,
             elem.style.height = `${!_height ? _height = this.maxH : _height}px`;
+    }
+
+    _isFinite(value) {
+        return isFinite(value) ? value : 0;
     }
 
     _setComputation() {
@@ -99,12 +103,12 @@ class Shape {
             }),
             _degree += this.dataOfComputations.centDegree;
 
-        this.dataOfCoord.points.forEach((dataOfCoord, i) => this.dataOfCoord.coordForShape += `${dataOfCoord.x} ${dataOfCoord.y}` + (this.numberOfSides - 1 > i ? ',' : ''));
+        this.dataOfCoord.points.forEach((dataOfCoord, i) => this.dataOfCoord.coordForShape += `${dataOfCoord.x} ${dataOfCoord.y}` + (this.numberOfSides - 1 > i ? ', ' : ''));
 
-        this.dataOfCoord.minX = this._findSpecialCoord('min', 'x'),
-            this.dataOfCoord.minY = this._findSpecialCoord('min', 'y');
-        this.dataOfCoord.maxX = this._findSpecialCoord('max', 'x'),
-            this.dataOfCoord.maxY = this._findSpecialCoord('max', 'y');
+        this.dataOfCoord.minX = this._isFinite(this._findSpecialCoord('min', 'x')),
+            this.dataOfCoord.minY = this._isFinite(this._findSpecialCoord('min', 'y'));
+        this.dataOfCoord.maxX = this._isFinite(this._findSpecialCoord('max', 'x')),
+            this.dataOfCoord.maxY = this._isFinite(this._findSpecialCoord('max', 'y'));
 
         this.dataOfComputations.diagonal = Math.abs(this.dataOfCoord.minX) + this.dataOfCoord.maxX;
         this.dataOfComputations.spaceX = ((this.dataOfComputations.diameter - this.dataOfComputations.diagonal) * 100) / this.maxW;
